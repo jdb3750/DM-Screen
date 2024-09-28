@@ -1,0 +1,55 @@
+{
+  "name": "Tomb of Annihilation",
+  "plotPoints": [
+    {
+      "name": "Arrive in Port Nyanzaru",
+      "npcs": [
+        {
+          "name": "Syndra Silvane",
+          "description": "A retired adventurer afflicted by the Death Curse.",
+          "stats": "HP: 40, AC: 12, INT: 15"
+        }
+      ]
+    },
+    {
+      "name": "Explore the Jungles of Chult",
+      "npcs": [
+        {
+          "name": "Artus Cimber",
+          "description": "A legendary explorer searching for his lost love.",
+          "stats": "HP: 82, AC: 16, DEX: 18"
+        }
+      ]
+    },
+    {
+      "name": "Discover the Lost City of Omu",
+      "npcs": [
+        {
+          "name": "Ras Nsi",
+          "description": "A yuan-ti warlord with ambitions of godhood.",
+          "stats": "HP: 112, AC: 15, CHA: 18"
+        }
+      ]
+    },
+    {
+      "name": "Navigate the Tomb of the Nine Gods",
+      "npcs": [
+        {
+          "name": "Withers",
+          "description": "An undead custodian of the tomb.",
+          "stats": "HP: 68, AC: 17, WIS: 16"
+        }
+      ]
+    },
+    {
+      "name": "Destroy the Soulmonger",
+      "npcs": [
+        {
+          "name": "Acererak",
+          "description": "An archlich who created the Soulmonger.",
+          "stats": "HP: 285, AC: 21, INT: 20"
+        }
+      ]
+    }
+  ]
+}
