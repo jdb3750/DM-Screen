@@ -1,0 +1,29 @@
+{
+    "adventures": [
+      {
+        "name": "Curse of Strahd",
+        "file": "adventure-cos.json",
+        "description": "The adventurers are trapped in the land of Barovia by the vampire Strahd von Zarovich, and must find a way to escape and defeat him."
+      },
+      {
+        "name": "Lost Mine of Phandelver",
+        "file": "adventure-lmop.json",
+        "description": "An introductory adventure for new players, the characters explore the town of Phandalin and uncover the mysteries of the Wave Echo Cave."
+      },
+      {
+        "name": "Out of the Abyss",
+        "file": "adventure-oota.json",
+        "description": "The adventurers are caught in the Underdark, struggling to escape and prevent the Demon Lords from spreading chaos across the surface world."
+      },
+      {
+        "name": "Tomb of Annihilation",
+        "file": "adventure-toa.json",
+        "description": "In the deadly jungles of Chult, the adventurers must find and destroy the Soulmonger, a device that traps the souls of the dead."
+      },
+      {
+        "name": "Hoard of the Dragon Queen",
+        "file": "adventure-hotdq.json",
+        "description": "The characters race against time to prevent the Cult of the Dragon from releasing Tiamat from the Nine Hells."
+      }
+    ]
+  }
