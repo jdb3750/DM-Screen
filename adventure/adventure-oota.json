@@ -1,0 +1,55 @@
+{
+  "name": "Out of the Abyss",
+  "plotPoints": [
+    {
+      "name": "Escape the Drow Prison",
+      "npcs": [
+        {
+          "name": "Ilvara Mizzrym",
+          "description": "A ruthless drow priestess overseeing the prison.",
+          "stats": "HP: 71, AC: 16, WIS: 17"
+        }
+      ]
+    },
+    {
+      "name": "Navigate the Underdark",
+      "npcs": [
+        {
+          "name": "Stool",
+          "description": "A myconid sprout that communicates via spores.",
+          "stats": "HP: 10, AC: 10, WIS: 12"
+        }
+      ]
+    },
+    {
+      "name": "Encounter Demogorgon",
+      "npcs": [
+        {
+          "name": "Demogorgon",
+          "description": "Prince of Demons, a towering figure of madness and destruction.",
+          "stats": "HP: 464, AC: 22, STR: 29"
+        }
+      ]
+    },
+    {
+      "name": "Find a Way to the Surface",
+      "npcs": [
+        {
+          "name": "Bruenor Battlehammer",
+          "description": "Dwarf king seeking to reclaim Gauntlgrym.",
+          "stats": "HP: 130, AC: 18, STR: 20"
+        }
+      ]
+    },
+    {
+      "name": "Stop the Demon Lords",
+      "npcs": [
+        {
+          "name": "Vizeran DeVir",
+          "description": "An exiled drow archmage with his own agenda.",
+          "stats": "HP: 150, AC: 17, INT: 20"
+        }
+      ]
+    }
+  ]
+}
