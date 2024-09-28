@@ -1,0 +1,55 @@
+{
+  "name": "Hoard of the Dragon Queen",
+  "plotPoints": [
+    {
+      "name": "Defend Greenest",
+      "npcs": [
+        {
+          "name": "Governor Nighthill",
+          "description": "The leader of Greenest seeking help against the cultists.",
+          "stats": "HP: 60, AC: 12, WIS: 14"
+        }
+      ]
+    },
+    {
+      "name": "Track the Cultists",
+      "npcs": [
+        {
+          "name": "Leosin Erlanthar",
+          "description": "A monk studying the Cult of the Dragon.",
+          "stats": "HP: 45, AC: 15, DEX: 17"
+        }
+      ]
+    },
+    {
+      "name": "Journey to Baldur's Gate",
+      "npcs": [
+        {
+          "name": "Ontharr Frume",
+          "description": "A paladin and member of the Order of the Gauntlet.",
+          "stats": "HP: 68, AC: 18, STR: 16"
+        }
+      ]
+    },
+    {
+      "name": "Traverse the Skyreach Castle",
+      "npcs": [
+        {
+          "name": "Rezmir",
+          "description": "A half-black dragon wyrmspeaker leading the cult's efforts.",
+          "stats": "HP: 90, AC: 18, CHA: 18"
+        }
+      ]
+    },
+    {
+      "name": "Prevent Tiamat's Return",
+      "npcs": [
+        {
+          "name": "Severin Silrajin",
+          "description": "The cult leader attempting to bring Tiamat into the world.",
+          "stats": "HP: 110, AC: 18, INT: 19"
+        }
+      ]
+    }
+  ]
+}
