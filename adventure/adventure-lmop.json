@@ -1,0 +1,55 @@
+{
+  "name": "Lost Mine of Phandelver",
+  "plotPoints": [
+    {
+      "name": "Arrive in Phandalin",
+      "npcs": [
+        {
+          "name": "Sildar Hallwinter",
+          "description": "A kind-hearted human male of nearly fifty years, member of the Lords' Alliance.",
+          "stats": "HP: 45, AC: 16, STR: 13"
+        }
+      ]
+    },
+    {
+      "name": "Investigate Redbrand Ruffians",
+      "npcs": [
+        {
+          "name": "Glasstaff",
+          "description": "The mysterious leader of the Redbrand Ruffians, actually Iarno Albrek.",
+          "stats": "HP: 40, AC: 12, INT: 15"
+        }
+      ]
+    },
+    {
+      "name": "Discover Cragmaw Castle",
+      "npcs": [
+        {
+          "name": "King Grol",
+          "description": "Leader of the Cragmaw goblins, a fierce bugbear.",
+          "stats": "HP: 65, AC: 16, STR: 15"
+        }
+      ]
+    },
+    {
+      "name": "Rescue Gundren Rockseeker",
+      "npcs": [
+        {
+          "name": "Gundren Rockseeker",
+          "description": "A dwarven prospector who discovered the location of Wave Echo Cave.",
+          "stats": "HP: 20, AC: 13, CON: 14"
+        }
+      ]
+    },
+    {
+      "name": "Explore Wave Echo Cave",
+      "npcs": [
+        {
+          "name": "The Black Spider",
+          "description": "A drow mastermind seeking control over the Spell Forge.",
+          "stats": "HP: 55, AC: 14, DEX: 15"
+        }
+      ]
+    }
+  ]
+}
