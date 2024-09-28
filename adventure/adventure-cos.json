@@ -1,0 +1,55 @@
+{
+  "name": "Curse of Strahd",
+  "plotPoints": [
+    {
+      "name": "Enter Barovia",
+      "npcs": [
+        {
+          "name": "Ismark Kolyanovich",
+          "description": "Son of the late burgomaster of Barovia, seeking help to protect his sister.",
+          "stats": "HP: 40, AC: 15, STR: 14"
+        }
+      ]
+    },
+    {
+      "name": "Meet Strahd",
+      "npcs": [
+        {
+          "name": "Strahd von Zarovich",
+          "description": "The ancient and powerful vampire lord of Barovia.",
+          "stats": "HP: 144, AC: 16, STR: 18"
+        }
+      ]
+    },
+    {
+      "name": "Explore Castle Ravenloft",
+      "npcs": [
+        {
+          "name": "Rahadin",
+          "description": "Strahd's loyal chamberlain and deadly warrior.",
+          "stats": "HP: 135, AC: 17, DEX: 16"
+        }
+      ]
+    },
+    {
+      "name": "Find the Holy Symbol",
+      "npcs": [
+        {
+          "name": "Madam Eva",
+          "description": "A Vistana seer who provides guidance through a Tarokka reading.",
+          "stats": "HP: 22, AC: 10, WIS: 16"
+        }
+      ]
+    },
+    {
+      "name": "Confront Strahd",
+      "npcs": [
+        {
+          "name": "Ireena Kolyana",
+          "description": "Ismark's sister, haunted by Strahd's interest in her.",
+          "stats": "HP: 30, AC: 14, CHA: 16"
+        }
+      ]
+    }
+  ]
+}
