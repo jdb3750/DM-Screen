@@ -5,8 +5,7 @@
     // Global Variables
     // ==========================
 
-    // Store all relevant NPCs and Player Characters in separate objects
-    const relevantNPCs = {};
+    let relevantNPCs = {};
     const playerCharacters = {};
     let selectedNPC = null;
     let selectedPC = null;
@@ -21,19 +20,105 @@
     const dice = [];
 
     // ==========================
-    // Event Listeners for PDF Upload and Adventure Name Display OLD
+    // Adventure Selection
     // ==========================
 
-    document.getElementById('uploadButton').addEventListener('click', handlePDFUpload);
+    let adventuresManifest = null;
+    let selectedAdventure = null;
+    let selectedAdventureData = null;
 
-    function handlePDFUpload() {
-        const fileInput = document.getElementById('fileInput');
-        const file = fileInput.files[0];
-        if (file) {
-            document.getElementById('adventure-name').textContent = `Adventure: ${file.name}`;
-            populateChecklist();
+    // Fetch the adventure manifest
+    async function fetchAdventuresManifest() {
+        try {
+            const response = await fetch('https://jdb3750.github.io/DM-Screen/adventure/adventure_manifest.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            adventuresManifest = await response.json();
+            populateAdventureList();
+        } catch (error) {
+            console.error('Error fetching adventure manifest:', error);
+        }
+    }
+
+    function populateAdventureList() {
+        const adventureList = document.getElementById('adventure-list');
+        adventureList.innerHTML = ''; // Clear previous content
+    
+        if (!adventuresManifest || !adventuresManifest.adventures) {
+            console.error('Adventures manifest is empty or invalid.');
+            return;
+        }
+    
+        // Sort the adventures alphabetically by name
+        const sortedAdventures = adventuresManifest.adventures.slice().sort((a, b) => {
+            return a.name.localeCompare(b.name);
+        });
+    
+        sortedAdventures.forEach(adventure => {
+            const adventureItem = document.createElement('div');
+            adventureItem.classList.add('adventure-item');
+            adventureItem.innerHTML = `
+                <div class="adventure-name">${adventure.name}</div>
+                <div class="adventure-description">${adventure.description}</div>
+            `;
+            adventureItem.addEventListener('click', () => {
+                selectAdventure(adventureItem, adventure);
+            });
+            adventureList.appendChild(adventureItem);
+        });
+    }
+    
+    
+    
+
+    // Select an adventure
+    async function selectAdventure(adventureItem, adventure) {
+        // Check if the clicked adventure is already selected
+        if (selectedAdventure && selectedAdventure.element === adventureItem) {
+            // Deselect the adventure
+            adventureItem.classList.remove('selected', 'expanded');
+            selectedAdventure = null;
+            selectedAdventureData = null;
+    
+            // Clear plot points and NPCs
+            clearChecklist();
+            updateNPCData();
         } else {
-            alert('Please upload a PDF file first.');
+            // Deselect previous adventure
+            if (selectedAdventure && selectedAdventure.element) {
+                selectedAdventure.element.classList.remove('selected', 'expanded');
+            }
+    
+            // Select new adventure
+            adventureItem.classList.add('selected', 'expanded');
+            selectedAdventure = { element: adventureItem, data: adventure };
+    
+            // Fetch adventure data
+            await fetchAdventureData(adventure.file);
+    
+            // Update plot points and NPCs
+            populateChecklist();
+            updateNPCData();
+        }
+    }
+
+    // Function to Clear the Plot Points Checklist
+    function clearChecklist() {
+        const checklist = document.getElementById('checklistItems');
+        checklist.innerHTML = ''; // Clear plot points
+    }
+
+    // Fetch adventure data
+    async function fetchAdventureData(file) {
+        try {
+            const response = await fetch(`https://jdb3750.github.io/DM-Screen/adventure/${file}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            selectedAdventureData = await response.json();
+        } catch (error) {
+            console.error('Error fetching adventure data:', error);
         }
     }
 
@@ -42,28 +127,22 @@
     // ==========================
 
     function populateChecklist() {
-        const plotPoints = [
-            'Introduction - Meet the NPC',
-            'First Encounter - Goblin Ambush',
-            'Find the Hidden Cave',
-            'Boss Battle - Defeat the Dragon',
-            'Treasure Found - Claim the Reward'
-        ];
+        const plotPoints = selectedAdventureData.plotPoints || [];
 
         const checklist = document.getElementById('checklistItems');
-        checklist.innerHTML = ''; // Clear previous content
+        checklist.innerHTML = '';  // Clear previous content
 
         plotPoints.forEach(point => {
             const li = document.createElement('li');
-            li.textContent = point;
+            li.textContent = point.name;
             li.classList.add('checklist-item');
 
-            li.addEventListener('click', () => {
-                li.classList.toggle('completed');
-                if (li.classList.contains('completed')) {
-                    addRelevantNPCs(point);
+            li.addEventListener('click', function () {
+                this.classList.toggle('completed');
+                if (this.classList.contains('completed')) {
+                    addRelevantNPCs(point.npcs);
                 } else {
-                    removeRelevantNPCs(point);
+                    removeRelevantNPCs(point.npcs);
                 }
             });
 
@@ -72,50 +151,31 @@
     }
 
     // ==========================
-    // NPC Data
+    // Functions to Handle NPCs
     // ==========================
 
-    const npcData = {
-        'Introduction - Meet the NPC': [
-            {
-                name: 'Gorath the Brave',
-                description: 'A fearless warrior with a mysterious past.',
-                stats: 'HP: 50, AC: 16, STR: 18'
-            }
-        ],
-        'Find the Hidden Cave': [
-            {
-                name: 'Mira the Scout',
-                description: 'A skilled tracker who knows the wilderness.',
-                stats: 'HP: 30, AC: 14, DEX: 16'
-            }
-        ]
-    };
-
-    // ==========================
-    // Functions to Add and Remove NPCs Based on Checked Items
-    // ==========================
-
-    function addRelevantNPCs(checkedItem) {
-        if (npcData[checkedItem]) {
-            npcData[checkedItem].forEach(npc => {
-                relevantNPCs[npc.name] = relevantNPCs[npc.name] || {
-                    ...npc,
-                    favorite: false,
-                    dead: false
-                };
+    function addRelevantNPCs(npcs) {
+        if (npcs) {
+            npcs.forEach(npc => {
+                relevantNPCs[npc.name] = relevantNPCs[npc.name] || { ...npc, favorite: false, dead: false };
             });
         }
         updateNPCList();
     }
 
-    function removeRelevantNPCs(checkedItem) {
-        if (npcData[checkedItem]) {
-            npcData[checkedItem].forEach(npc => {
+    function removeRelevantNPCs(npcs) {
+        if (npcs) {
+            npcs.forEach(npc => {
                 delete relevantNPCs[npc.name];
             });
         }
         updateNPCList();
+    }
+
+    function updateNPCData() {
+        relevantNPCs = {}; // Clear existing NPCs
+        updateNPCList();
+        clearNPCDetails();
     }
 
     // ==========================
@@ -151,18 +211,18 @@
             if (npc.dead) skull.classList.add('dead');
 
             // Star click toggle
-            star.addEventListener('click', function (e) {
+            star.addEventListener('click', e => {
                 e.stopPropagation();
                 npc.favorite = !npc.favorite;
-                this.classList.toggle('favorite');
+                star.classList.toggle('favorite');
                 npcItem.classList.toggle('favorite-highlight', npc.favorite);
             });
 
             // Skull click toggle
-            skull.addEventListener('click', function (e) {
+            skull.addEventListener('click', e => {
                 e.stopPropagation();
                 npc.dead = !npc.dead;
-                this.classList.toggle('dead');
+                skull.classList.toggle('dead');
                 npcItem.classList.toggle('sketchy-strikethrough', npc.dead);
             });
 
@@ -699,4 +759,7 @@
     // ==========================
 
     init();
+
+    // Call to fetch the adventure manifest
+    fetchAdventuresManifest();
 })();

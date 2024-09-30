@@ -22,14 +22,12 @@
     <main>
         <!-- Two-Column Layout for PDF Upload and Dice Roller -->
         <div class="columns">
-            <!-- PDF Upload Section -->
-            <section id="pdf-upload">
-                <h2>Upload a Prewritten Adventure</h2>
-                <label for="fileInput" class="visually-hidden">Choose a PDF file</label>
-                <input type="file" id="fileInput" accept=".pdf">
-                <button id="uploadButton" type="button">Upload PDF</button>
-                <p id="adventure-name">Adventure: Not uploaded</p>
+            <!-- select adventure from list -->
+            <section id="adventure-selection">
+                <h2>Select an Adventure</h2>
+                <div id="adventure-list"></div>
             </section>
+            
 
             <!-- Dice Roller Section -->
             <section id="dice-roller">
