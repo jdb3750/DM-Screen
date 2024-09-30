@@ -44,17 +44,17 @@
     function populateAdventureList() {
         const adventureList = document.getElementById('adventure-list');
         adventureList.innerHTML = ''; // Clear previous content
-    
+
         if (!adventuresManifest || !adventuresManifest.adventures) {
             console.error('Adventures manifest is empty or invalid.');
             return;
         }
-    
+
         // Sort the adventures alphabetically by name
         const sortedAdventures = adventuresManifest.adventures.slice().sort((a, b) => {
             return a.name.localeCompare(b.name);
         });
-    
+
         sortedAdventures.forEach(adventure => {
             const adventureItem = document.createElement('div');
             adventureItem.classList.add('adventure-item');
@@ -68,9 +68,6 @@
             adventureList.appendChild(adventureItem);
         });
     }
-    
-    
-    
 
     // Select an adventure
     async function selectAdventure(adventureItem, adventure) {
@@ -80,7 +77,7 @@
             adventureItem.classList.remove('selected', 'expanded');
             selectedAdventure = null;
             selectedAdventureData = null;
-    
+
             // Clear plot points and NPCs
             clearChecklist();
             updateNPCData();
@@ -89,14 +86,14 @@
             if (selectedAdventure && selectedAdventure.element) {
                 selectedAdventure.element.classList.remove('selected', 'expanded');
             }
-    
+
             // Select new adventure
             adventureItem.classList.add('selected', 'expanded');
             selectedAdventure = { element: adventureItem, data: adventure };
-    
+
             // Fetch adventure data
             await fetchAdventureData(adventure.file);
-    
+
             // Update plot points and NPCs
             populateChecklist();
             updateNPCData();
@@ -439,6 +436,10 @@
     function init() {
         const canvas = document.getElementById('dice-canvas');
 
+        // Renderer
+        renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setClearColor(0x000000, 0);
+
         // Scene Setup
         scene = new THREE.Scene();
 
@@ -464,24 +465,10 @@
         groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
         world.addBody(groundBody);
 
-        // Set up Orthographic Camera
-        const aspect = canvas.clientWidth / canvas.clientHeight;
-        const viewSize = 20;
-        camera = new THREE.OrthographicCamera(
-            (-aspect * viewSize) / 2,
-            (aspect * viewSize) / 2,
-            viewSize / 2,
-            -viewSize / 2,
-            -100,
-            100
-        );
+        // Camera
+        camera = new THREE.OrthographicCamera();
         camera.position.set(0, 15, 0);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-        // Renderer
-        renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-        renderer.setClearColor(0x000000, 0);
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
         // Lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
@@ -489,6 +476,32 @@
         const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
         directionalLight.position.set(5, 10, 7.5);
         scene.add(directionalLight);
+
+        // Handle resizing
+        function onWindowResize() {
+            const canvasWidth = canvas.clientWidth;
+            const canvasHeight = canvas.clientHeight;
+
+            // Update camera aspect and view size
+            const aspect = canvasWidth / canvasHeight;
+            const viewSize = 20; // Adjust this value to control zoom level
+            camera.left = (-aspect * viewSize) / 2;
+            camera.right = (aspect * viewSize) / 2;
+            camera.top = viewSize / 2;
+            camera.bottom = -viewSize / 2;
+            camera.near = -100;
+            camera.far = 100;
+            camera.updateProjectionMatrix();
+
+            // Update renderer size
+            renderer.setSize(canvasWidth, canvasHeight);
+        }
+
+        // Initial sizing
+        onWindowResize();
+
+        // Event listener for window resize
+        window.addEventListener('resize', onWindowResize);
 
         // Create Boundaries
         createDiceBoundaries();
@@ -503,17 +516,19 @@
         const canvasWidth = canvasRect.width;
         const canvasHeight = canvasRect.height;
 
-        const pixelsToUnits = 10 / canvasHeight;
+        // Calculate units per pixel based on camera's view size
+        const viewSize = camera.top - camera.bottom;
+        const pixelsToUnits = viewSize / canvasHeight;
+
         const boundaryWidth = (canvasWidth * pixelsToUnits) / 2;
-        const sideBoundaryWidth = boundaryWidth * 2;
-        const boundaryHeight = 20;
-        const wallThickness = 6;
+        const boundaryHeight = viewSize / 2;
+        const wallThickness = 2; // Adjust if needed
 
         const wallPositions = [
-            { x: 0, y: boundaryHeight / 2, z: -boundaryWidth },
-            { x: 0, y: boundaryHeight / 2, z: boundaryWidth },
-            { x: -sideBoundaryWidth, y: boundaryHeight / 2, z: 0 },
-            { x: sideBoundaryWidth, y: boundaryHeight / 2, z: 0 }
+            { x: 0, y: boundaryHeight / 2, z: -boundaryWidth }, // Back wall
+            { x: 0, y: boundaryHeight / 2, z: boundaryWidth },  // Front wall
+            { x: -boundaryWidth, y: boundaryHeight / 2, z: 0 }, // Left wall
+            { x: boundaryWidth, y: boundaryHeight / 2, z: 0 }   // Right wall
         ];
 
         wallPositions.forEach((pos, index) => {
@@ -522,7 +537,7 @@
                 new CANNON.Vec3(
                     isVertical ? boundaryWidth + wallThickness : wallThickness,
                     boundaryHeight / 2,
-                    isVertical ? wallThickness : sideBoundaryWidth + wallThickness
+                    isVertical ? wallThickness : boundaryWidth + wallThickness
                 )
             );
 
@@ -532,7 +547,7 @@
             world.addBody(wallBody);
         });
 
-        // Ceiling
+        // Ceiling (optional)
         const ceilingBody = new CANNON.Body({ mass: 0 });
         const ceilingShape = new CANNON.Plane();
         ceilingBody.addShape(ceilingShape);
@@ -547,6 +562,14 @@
 
     function animate() {
         requestAnimationFrame(animate);
+
+        // Update on resize
+        const canvas = document.getElementById('dice-canvas');
+        if (canvas.clientWidth !== renderer.domElement.width || canvas.clientHeight !== renderer.domElement.height) {
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            camera.updateProjectionMatrix();
+        }
+
         world.step(1 / 60); // Step the physics world
 
         // Sync Three.js meshes with Cannon.js bodies
@@ -563,8 +586,10 @@
     // ==========================
 
     function rollDice() {
-        const rollForce = 20;
-        const rollTorque = 30;
+        const canvas = document.getElementById('dice-canvas');
+        const canvasHeight = canvas.clientHeight;
+        const rollForce = canvasHeight * 0.15; // Example scaling
+        const rollTorque = canvasHeight * 0.06;
 
         dice.forEach(die => {
             die.body.velocity.set(0, 0, 0);
