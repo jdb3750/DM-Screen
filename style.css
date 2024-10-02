@@ -69,6 +69,7 @@ footer p {
 }
 
 /* ===================== Buttons and Inputs ===================== */
+/* ===================== Buttons and Inputs ===================== */
 input,
 button,
 .dice-button,
@@ -82,22 +83,22 @@ button,
     color: var(--primary-color);
     cursor: pointer;
     font-family: var(--font-primary);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: opacity 0.3s ease;
 }
 
 input:hover,
 button:hover,
 .dice-button:hover,
 .action-button:hover {
-    background-color: var(--button-hover-bg-color);
-    transform: scale(1.05);
+    opacity: 0.8;
+    cursor: pointer;
 }
 
 input:active,
 button:active,
 .dice-button:active,
 .action-button:active {
-    transform: scale(0.95);
+    transform: none; /* Removed scaling effect */
 }
 
 input {
@@ -119,19 +120,47 @@ ul li {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* ===================== Checklist Styles ====================== */
-.checklist-item {
+.list-item {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 1rem;
+    margin: 0.5rem 0;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
-.completed {
-    opacity: 0.6;
+.list-item img {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    height: 20px;
+    width: 20px;
+}
+
+.list-item:hover,
+.adventure-item:hover,
+.checklist-item:hover,
+.npc-item:hover,
+.pc-item:hover {
+    opacity: 0.8; /* Only adjust opacity on hover */
+    cursor: pointer; /* Show pointer cursor */
+}
+
+/* ===================== Checklist Styles ====================== */
+.checklist-item {
+    height: auto;
+    padding: 0.5rem 1rem;
+}
+
+.checklist-item.completed {
     text-decoration: line-through wavy;
+    opacity: 0.6;
 }
 
 /* ================= Adventure Selection Styles ================= */
-
 #adventure-selection {
     flex: 1;
     padding: 1rem;
@@ -141,12 +170,12 @@ ul li {
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
-    height: var(--container-height); /* Updated to use the variable */
+    height: var(--container-height);
 }
 
 #adventure-list {
     flex: 1;
-    overflow-y: auto;
+    overflow-y: auto; /* Restore scroll functionality */
     margin-top: 1rem;
     scrollbar-width: thin;
     scrollbar-color: var(--secondary-color) var(--highlight-color);
@@ -170,15 +199,11 @@ ul li {
 /* Adventure Item Styles */
 .adventure-item {
     background-color: var(--highlight-color);
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     margin-bottom: 0.5rem;
     border-left: 4px solid var(--secondary-color);
     border-radius: 5px;
     cursor: pointer;
-}
-
-.adventure-item:hover {
-    background-color: var(--background-color);
 }
 
 .adventure-item.selected {
@@ -186,24 +211,23 @@ ul li {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-/* Optional Collapsible Description */
 .adventure-description {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
 }
 
 .adventure-item.expanded .adventure-description {
-    max-height: 100px; /* Adjust as needed */
+    max-height: 100px;
+    padding: 0.5rem 0;
 }
 
 /* Responsive Height Adjustment */
 @media (max-width: 600px) {
     #dice-roller, #adventure-selection {
-        height: 300px; /* Adjust as needed for smaller screens */
+        height: 300px;
     }
 }
-
 /* =================== Adventure List and Dice Roller ===================== */
 #adventure-selection,
 #dice-roller {
@@ -243,7 +267,7 @@ ul li {
     background-color: var(--accent-color);
     border: 4px solid var(--secondary-color);
     border-radius: 10px;
-    height: var(--container-height); /* Added height */
+    height: var(--container-height);
 }
 
 /* ================ NPC and PC Section Styles ================= */
@@ -294,8 +318,10 @@ ul li {
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    text-decoration: none; /* Ensure default state has no text decoration */
-    opacity: 1;            /* Ensure default state is fully opaque */
+    display: flex;
+    height: 40px;
+    align-items: center;
+    transition: opacity 0.2s ease;
 }
 
 .npc-item.npc-selected,
@@ -303,6 +329,20 @@ ul li {
     border: 2px solid #4a90e2;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
+
+/* icon spacing */
+.npc-icon {
+    display: flex;
+    align-items: center;             /* Center icon vertically */
+    margin-right: 0.3rem;            /* Spacing between icons and text */
+}
+
+/* Specific Star and Skull Icon Adjustments */
+.npc-icon img {
+    width: 16px;                     /* Set consistent size for icons */
+    height: 16px;
+}
+
 
 /* =================== Character Form Styles ================== */
 /* Form Display */
@@ -331,7 +371,7 @@ ul li {
     justify-content: center;
     gap: 1rem;
 }
-
+/* =================== Character Form Styles ================== */
 /* Buttons within the Character Form */
 #character-form button {
     flex: 1;
@@ -343,7 +383,7 @@ ul li {
     cursor: pointer;
     border: none;
     border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: opacity 0.3s ease; /* Updated to match the hover effect */
 }
 
 /* Specific Styles for Create and Close Buttons */
@@ -353,6 +393,7 @@ ul li {
 
 #create-btn:hover {
     background-color: #3367d6;
+    opacity: 0.8; /* Updated to only change opacity on hover */
 }
 
 #close-btn {
@@ -361,16 +402,20 @@ ul li {
 
 #close-btn:hover {
     background-color: #d32f2f;
+    opacity: 0.8; /* Updated to only change opacity on hover */
 }
 
 /* Hover and Active States */
 #character-form button:hover {
-    transform: scale(1.05);
+    opacity: 0.8; /* Updated hover state */
+    cursor: pointer; /* Show pointer cursor */
+    transform: none; /* Removed scaling effect */
 }
 
 #character-form button:active {
-    transform: scale(0.95);
+    transform: none; /* Removed scaling effect */
 }
+
 
 /* ================= PC Section Button Styles ================= */
 #create-character-btn {
@@ -401,7 +446,7 @@ ul li {
 /* Strikethrough for Dead NPCs */
 .npc-item.sketchy-strikethrough {
     text-decoration: line-through wavy;
-    opacity: 0.6; /* Adjust transparency as desired */
+    opacity: 0.6;
 }
 
 /* Both Effects Applied */
